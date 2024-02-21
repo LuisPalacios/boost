@@ -4,92 +4,61 @@
 #include <fstream>
 #include <iostream>
 
-#include <cxxopts.hpp>
 #include <fmt/format.h>
-#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 #include "config.hpp"
 #include "my_lib.h"
 
-using json = nlohmann::json;
-namespace fs = std::filesystem;
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+
+//#include <boost/lambda/lambda.hpp>
+#include <boost/regex.hpp>
+
 
 int main(int argc, char **argv)
 {
-    std::cout << "JSON: " << NLOHMANN_JSON_VERSION_MAJOR << "."
-              << NLOHMANN_JSON_VERSION_MINOR << "."
-              << NLOHMANN_JSON_VERSION_PATCH << '\n';
+    /**
+     * @brief Default
+     *
     std::cout << "FMT: " << FMT_VERSION << '\n';
-    std::cout << "CXXOPTS: " << CXXOPTS__VERSION_MAJOR << "."
-              << CXXOPTS__VERSION_MINOR << "." << CXXOPTS__VERSION_PATCH
-              << '\n';
     std::cout << "SPDLOG: " << SPDLOG_VER_MAJOR << "." << SPDLOG_VER_MINOR
               << "." << SPDLOG_VER_PATCH << '\n';
-    std::cout << "\n\nUsage Example:\n";
-
-    // Compiler Warning and clang tidy error
-    // std::int32_t i = 0;
-
-    // Adress Sanitizer should see this
-    // int *x = new int[42];
-    // x[100] = 5; // Boom!
 
     const auto welcome_message =
         fmt::format("Welcome to {} v{}\n", project_name, project_version);
     spdlog::info(welcome_message);
+    */
 
-    cxxopts::Options options(project_name.data(), welcome_message);
+    /**
+     * @brief Test 1
+     *
 
-    options.add_options("arguments")("h,help", "Print usage")(
-        "f,filename",
-        "File name",
-        cxxopts::value<std::string>())(
-        "v,verbose",
-        "Verbose output",
-        cxxopts::value<bool>()->default_value("false"));
+    using namespace boost::lambda;
+    typedef std::istream_iterator<int> in;
 
-    auto result = options.parse(argc, argv);
+    std::for_each(
+        in(std::cin), in(), std::cout << (_1 * 3) << " "
+        );
+     */
 
-    if (argc == 1 || result.count("help"))
-    {
-        std::cout << options.help() << '\n';
-        return 0;
+    /**
+     * @brief Test 2
+     *
+     */
+    std::string line;
+    boost::regex pat ("^Subject: (Re: |Aw: )*(.*)" );
+
+    while (std::cin) {
+        std::getline(std::cin, line);
+        boost::smatch matches;
+        if (boost::regex_match(line,matches,pat))
+            std::cout << matches[2] << std::endl;
+
     }
 
-    auto filename = std::string{};
-    auto verbose = false;
-
-    if (result.count("filename"))
-    {
-        filename = result["filename"].as<std::string>();
-    }
-    else
-    {
-        return 1;
-    }
-
-    verbose = result["verbose"].as<bool>();
-
-    if (verbose)
-    {
-        fmt::print("Opening file: {}\n", filename);
-    }
-
-    auto ifs = std::ifstream{filename};
-
-    if (!ifs.is_open())
-    {
-        return 1;
-    }
-
-    const auto parsed_data = json::parse(ifs);
-
-    if (verbose)
-    {
-        const auto name = parsed_data["name"];
-        fmt::print("Name: {}\n", name);
-    }
 
     return 0;
 }

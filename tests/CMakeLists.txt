@@ -7,13 +7,15 @@ if(ENABLE_TESTING)
     target_link_libraries(${UNIT_TEST_NAME} PUBLIC ${LIBRARY_NAME})
     target_link_libraries(${UNIT_TEST_NAME} PRIVATE Catch2::Catch2)
 
-    target_set_warnings(
-        TARGET
-        ${UNIT_TEST_NAME}
-        ENABLE
-        ${ENABLE_WARNINGS}
-        AS_ERRORS
-        ${ENABLE_WARNINGS_AS_ERRORS})
+    if(${ENABLE_WARNINGS})
+        target_set_warnings(
+            TARGET
+            ${UNIT_TEST_NAME}
+            ENABLE
+            ${ENABLE_WARNINGS}
+            AS_ERRORS
+            ${ENABLE_WARNINGS_AS_ERRORS})
+    endif()
 
     if(ENABLE_COVERAGE)
         set(COVERAGE_MAIN "coverage")

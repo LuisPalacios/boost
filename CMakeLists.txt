@@ -6,7 +6,7 @@ project(
     LANGUAGES C CXX)
 
 # Global CMake variables are set here
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -16,7 +16,7 @@ option(USE_CONAN "Whether to use Conan." OFF)
 option(USE_VCPKG "Whether to use VCPKG." OFF)
 option(USE_CPM "Whether to use CPM." ON)
 
-option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)
+option(ENABLE_WARNINGS "Enable to add warnings to a target." OFF)
 option(ENABLE_WARNINGS_AS_ERRORS "Enable to treat warnings as errors." OFF)
 
 option(ENABLE_TESTING "Enable a Unit Testing build." ON)
@@ -67,7 +67,7 @@ if(ENABLE_LTO)
     include(LTO)
 endif()
 
-# EXTERNAL LIBRARIES
+# EXTERNAL SOURCE LIBRARIES
 
 if(USE_CONAN)
     message(STATUS "Using Conan")
@@ -95,13 +95,26 @@ else(USE_CPM)
     cpmaddpackage("gh:gabime/spdlog@1.11.0")
 endif()
 
-# SUB DIRECTORIES
+# EXTERNAL BINARY LIBRARIES
 
+# Boost libraries
+#set(Boost_USE_STATIC_LIBS OFF)
+#set(Boost_USE_MULTITHREADED_LIBS ON)
+#set(Boost_USE_STATIC_RUNTIME OFF)
+# Solo necesito Regex, pero dejo también system y filesystem como ejemplo
+find_package(Boost 1.74.0 REQUIRED
+        system
+        filesystem
+        regex)
+
+# SUB DIRECTORIES
 add_subdirectory(configured)
 add_subdirectory(external)
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(tests)
+
+
 
 # INSTALL TARGETS
 

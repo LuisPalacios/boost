@@ -1,14 +1,18 @@
+# Especifico dónde están los fuentes.
+#
 set(APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/main.cc")
 
+# Ubicación del ejecutable
 add_executable(${EXECUTABLE_NAME} ${APP_SOURCES})
 
-target_link_libraries(
-    ${EXECUTABLE_NAME}
-    PRIVATE ${LIBRARY_NAME}
-            nlohmann_json::nlohmann_json
-            fmt::fmt
-            spdlog::spdlog
-            cxxopts::cxxopts)
+# Link del ejecutable con las librerías
+target_link_libraries( ${EXECUTABLE_NAME}
+    PRIVATE
+    ${LIBRARY_NAME}
+    Boost::regex
+    fmt::fmt
+    spdlog::spdlog)
+
 
 if(${ENABLE_WARNINGS})
     target_set_warnings(
