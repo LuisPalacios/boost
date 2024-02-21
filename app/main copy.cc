@@ -6,20 +6,20 @@
 
 #include <cxxopts.hpp>
 #include <fmt/format.h>
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 #include "config.hpp"
 #include "my_lib.h"
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 namespace fs = std::filesystem;
 
 int main(int argc, char **argv)
 {
-    std::cout << "JSON: " << NLOHMANN_JSON_VERSION_MAJOR << "."
-              << NLOHMANN_JSON_VERSION_MINOR << "."
-              << NLOHMANN_JSON_VERSION_PATCH << '\n';
+    // std::cout << "JSON: " << NLOHMANN_JSON_VERSION_MAJOR << "."
+    //           << NLOHMANN_JSON_VERSION_MINOR << "."
+    //           << NLOHMANN_JSON_VERSION_PATCH << '\n';
     std::cout << "FMT: " << FMT_VERSION << '\n';
     std::cout << "CXXOPTS: " << CXXOPTS__VERSION_MAJOR << "."
               << CXXOPTS__VERSION_MINOR << "." << CXXOPTS__VERSION_PATCH
@@ -83,13 +83,15 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    const auto parsed_data = json::parse(ifs);
+    // Uso de la librería JSON
 
-    if (verbose)
-    {
-        const auto name = parsed_data["name"];
-        fmt::print("Name: {}\n", name);
-    }
+    // const auto parsed_data = json::parse(ifs);
+
+    // if (verbose)
+    // {
+    //     const auto name = parsed_data["name"];
+    //     fmt::print("Name: {}\n", name);
+    // }
 
     return 0;
 }
