@@ -18,6 +18,13 @@
 #include <boost/regex.hpp>
 
 
+/**
+ * @brief Entrada al programa
+ *
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char **argv)
 {
     /**
